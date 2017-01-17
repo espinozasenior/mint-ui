@@ -1,5 +1,22 @@
 <template>
-  <button
+  <a v-if="link"
+    href="{{link}}
+    :type="nativeType"
+    class="mint-button"
+    :class="['mint-button--' + type, 'mint-button--' + size, {
+      'is-disabled': disabled,
+      'is-plain': plain
+    }]"
+    @click="handleClick"
+    :disabled="disabled">
+    <span class="mint-button-icon" v-if="icon || $slots.icon">
+      <slot name="icon">
+        <i v-if="icon" class="mintui" :class="'mintui-' + icon"></i>
+      </slot>
+    </span>
+    <label class="mint-button-text"><slot></slot></label>
+  </a>
+  <button v-else
     :type="nativeType"
     class="mint-button"
     :class="['mint-button--' + type, 'mint-button--' + size, {
@@ -34,7 +51,7 @@ if (process.env.NODE_ENV === 'component') {
  * @param {string} [icon] - 图标，提供 more, back，或者自定义的图标（传入不带前缀的图标类名，最后拼接成 .mintui-xxx）
  * @param {slot} - 显示文本
  * @param {slot} [icon] 显示图标
- *
+ * @param {string} - [link=null] - Null or any link
  * @example
  * <mt-button size="large" icon="back" type="primary">按钮</mt-button>
  */
@@ -73,6 +90,10 @@ export default {
           'large'
         ].indexOf(value) > -1;
       }
+    },
+    link: {
+      type: String,
+      default: null
     }
   }
 };
@@ -95,7 +116,7 @@ export default {
       overflow: hidden;
       position: relative;
       text-align: center;
-
+      text-decoration: none;
       &::after {
         background-color: #000;
         content: " ";
